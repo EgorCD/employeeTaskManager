@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <title>Task Manager Dashboard</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" th:href="@{css/bootstrap.min.css}" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        .bold-text * {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5 bold-text">
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <h1>Tasks</h1>
+            </div>
+            <div class="col-md-6 d-flex justify-content-end align-items-center">
+                <div class="me-2"> <!-- Add role display -->
+                    <span sec:authorize="hasAuthority('ADMIN')">Your role is: admin</span>
+                    <span sec:authorize="hasAuthority('USER')">Your role is: user</span>
+                </div>
+                <div class="mx-2"></div>
+                <form th:action="@{/logout}" method="post" class="ms-2">
+                    <input type="submit" value="Sign Out" class="btn btn-sm btn-danger rounded-pill"/>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Task Table -->
+        <div class="table-responsive">
+            <table class="table table-striped table-hover align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col">Address</th>
+                        <th scope="col">Employee</th>
+                        <th scope="col">Task</th>
+                        <th scope="col">Response</th>
+                        <th scope="col">Feedback</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Posted Date</th>
+                        <th scope="col">Deadline</th>
+                        <th scope="col" class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="task : ${tasks}">
+                        <td th:text="${task.address.name}"></td>
+                        <td th:text="${task.employee.name}"></td>
+                        <td th:text="${task.request}"></td>
+                        <td th:text="${task.response}"></td>
+                        <td th:text="${task.feedback}"></td>
+                        <td th:text="${task.status.name}"></td>
+                        <td th:text="${#temporals.format(task.postedDate, 'yyyy-MM-dd HH:mm')}"></td>
+                        <td th:text="${#temporals.format(task.deadline, 'yyyy-MM-dd HH:mm')}"></td>
+                        <td class="text-center">
+                            <a th:href="@{/editTaskUser/{id}(id=${task.id})}" sec:authorize="hasAuthority('USER')" class="btn btn-primary btn-sm m-1 rounded-pill">Edit</a>
+                            <a th:href="@{/editTask/{id}(id=${task.id})}" sec:authorize="hasAuthority('ADMIN')" class="btn btn-primary btn-sm m-1 rounded-pill">Edit</a>
+                            <a th:href="@{/deleteTask/{id}(id=${task.id})}" sec:authorize="hasAuthority('ADMIN')" class="btn btn-danger btn-sm m-1 rounded-pill">Delete</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Admin Actions -->
+        <div class="text-end mb-3">
+            <a href="/addTask" sec:authorize="hasAuthority('ADMIN')" class="btn btn-success rounded-pill">Add New Task</a>
+        </div>
+    </div>
+</body>
+</html>

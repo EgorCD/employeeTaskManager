@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+<title>Edit Task</title>
+<link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css"
+	th:href="@{/css/bootstrap.min.css}" />
+	<style>
+		.bold-text * {
+			font-weight: bold;
+		}
+	</style>
+</head>
+<body>
+	<div class="container mt-5 bold-text">
+		<form th:action="@{/saveEditedTask}" th:object="${task}" method="post"
+			class="form-group">
+
+			<!-- Task Field for Admin -->
+			<div class="mb-3" sec:authorize="hasAuthority('ADMIN')">
+				<label for="id" class="form-label">Task Id</label> <input
+					type="text" id="id" class="form-control" th:field="*{id}" readonly />
+			</div>
+
+			<!-- Address Field -->
+			<div class="mb-3" sec:authorize="hasAuthority('ADMIN')">
+				<label for="address" class="form-label">Address</label> <select
+					id="address" class="form-control" th:field="*{address.addressid}">
+					<option th:each="address : ${addresses}"
+						th:value="${address.addressid}" th:text="${address.name}"
+						th:selected="${address.addressid == task.address.addressid ? 'selected' : ''}">
+					</option>
+				</select>
+			</div>
+
+			<!-- Employee Field -->
+			<div class="mb-3" sec:authorize="hasAuthority('ADMIN')">
+				<label for="employee" class="form-label">Employee</label> <select
+					id="employee" class="form-control"
+					th:field="*{employee.employeeid}">
+					<option th:each="employee : ${employees}"
+						th:value="${employee.employeeid}" th:text="${employee.name}"
+						th:selected="${employee.employeeid == task.employee.employeeid ? 'selected' : ''}">
+					</option>
+				</select>
+			</div>
+
+			<!-- Task Field for Admin -->
+			<div class="mb-3" sec:authorize="hasAuthority('ADMIN')">
+				<label for="request" class="form-label">Request</label> <input
+					type="text" id="request" class="form-control" th:field="*{request}"
+					required />
+			</div>
+
+			<!-- Response Field for User -->
+			<div class="mb-3">
+				<label for="response" class="form-label">Response</label> <input
+					type="text" id="response" class="form-control"
+					th:field="*{response}" required readonly />
+			</div>
+			
+			<!-- Response Field for User -->
+			<div class="mb-3">
+				<label for="feedback" class="form-label">Feedback</label> <input
+					type="text" id="feedback" class="form-control"
+					th:field="*{feedback}" required />
+			</div>
+
+			<div class="mb-3" sec:authorize="hasAuthority('ADMIN')">
+				<label for="postedDate" class="form-label">Posted Date</label> <input
+					type="datetime-local" id="postedDate" class="form-control"
+					th:value="${#temporals.format(task.postedDate, 'yyyy-MM-dd''T''HH:mm')}"
+					name="postedDate" readonly />
+			</div>
+
+			<div class="mb-3" sec:authorize="hasAuthority('ADMIN')">
+				<label for="deadline" class="form-label">Deadline</label> <input
+					type="datetime-local" id="deadline" class="form-control"
+					th:value="${#temporals.format(task.deadline, 'yyyy-MM-dd''T''HH:mm')}"
+					name="deadline" readonly />
+			</div>
+			
+			<!-- Status Dropdown for User -->
+			<div class="mb-3">
+				<label for="status" class="form-label">Status</label> <select
+					id="status" class="form-control" th:field="*{status.statusid}">
+					<option th:each="status : ${statuses}"
+						th:value="${status.statusid}" th:text="${status.name}"
+						th:selected="${status.statusid == task.status.statusid ? 'selected' : ''}">
+					</option>
+				</select>
+			</div>
+
+			<!-- Submit Button -->
+			<div class="mb-3">
+				<input type="submit" value="Save Task"
+					class="btn btn-primary rounded-pill">
+			</div>
+
+		</form>
+	</div>
+</body>
+</html>
