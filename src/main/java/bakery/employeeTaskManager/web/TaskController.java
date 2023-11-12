@@ -1,6 +1,7 @@
 package bakery.employeeTaskManager.web;
 
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -114,6 +115,17 @@ public class TaskController {
 	public String saveEditedTask(@ModelAttribute Task taskForm) {
 		taskRepository.save(taskForm);
 		return "redirect:/tasklist";
+	}
+	
+	@GetMapping("/searchTasks")
+	public String searchTasks(@RequestParam String employeeName, Model model) {
+	    List<Task> tasks = taskRepository.findByEmployeeName(employeeName);
+	    if (tasks.isEmpty()) {
+	        model.addAttribute("noResults", true); // This attribute signals that the search yielded no results
+	    } else {
+	        model.addAttribute("tasks", tasks);
+	    }
+	    return "index"; // Renders the index.html template
 	}
 	
 	@GetMapping("/editTaskUser/{id}")
