@@ -42,6 +42,7 @@
                         <th scope="col">Status</th>
                         <th scope="col">Posted Date</th>
                         <th scope="col">Deadline</th>
+                        <th scope="col">Approval</th>
                         <th scope="col" class="text-center">Actions</th>
                     </tr>
                 </thead>
@@ -55,6 +56,7 @@
                         <td th:text="${task.status.name}"></td>
                         <td th:text="${#temporals.format(task.postedDate, 'yyyy-MM-dd HH:mm')}"></td>
                         <td th:text="${#temporals.format(task.deadline, 'yyyy-MM-dd HH:mm')}"></td>
+                        <td th:text="${task.approval.name}"></td>
                         <td class="text-center">
                             <a th:href="@{/editTaskUser/{id}(id=${task.id})}" sec:authorize="hasAuthority('USER')" class="btn btn-primary btn-sm m-1 rounded-pill">Edit</a>
                             <a th:href="@{/editTask/{id}(id=${task.id})}" sec:authorize="hasAuthority('ADMIN')" class="btn btn-primary btn-sm m-1 rounded-pill">Edit</a>

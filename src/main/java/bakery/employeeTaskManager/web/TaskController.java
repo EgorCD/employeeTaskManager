@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import bakery.employeeTaskManager.domain.Task;
 import bakery.employeeTaskManager.domain.TaskRepository;
 import bakery.employeeTaskManager.domain.AddressRepository;
+import bakery.employeeTaskManager.domain.ApprovalRepository;
 import bakery.employeeTaskManager.domain.EmployeeRepository;
 import bakery.employeeTaskManager.domain.StatusRepository;
 
@@ -30,6 +31,9 @@ public class TaskController {
 
 	@Autowired
 	private EmployeeRepository employeeRepository;
+	
+	@Autowired
+	private ApprovalRepository approvalRepository;
 
 	private static final Logger log = LoggerFactory.getLogger(TaskController.class);
 
@@ -65,6 +69,7 @@ public class TaskController {
 		model.addAttribute("addresses", addressRepository.findAll()); // Assuming you have a service method to get all															// // addresses
 		model.addAttribute("employees", employeeRepository.findAll()); // Assuming you have a service method to get all
 		model.addAttribute("statuses", statusRepository.findAll()); // Assuming you have a service method to get all //															// statuses
+		model.addAttribute("approvals", approvalRepository.findAll());
 		return "addtask";
 	}
 
@@ -98,6 +103,7 @@ public class TaskController {
 			model.addAttribute("addresses", addressRepository.findAll()); // Assuming you have a service method to get
 			model.addAttribute("employees", employeeRepository.findAll()); // Assuming you have a service method to get
 			model.addAttribute("statuses", statusRepository.findAll()); // Assuming you have a service method to get all													// // // // statuses
+			model.addAttribute("approvals", approvalRepository.findAll());
 			return "edittask";
 		} else {
 			return "redirect:/tasklist";
@@ -125,6 +131,7 @@ public class TaskController {
 			model.addAttribute("addresses", addressRepository.findAll()); // Assuming you have a service method to get
 			model.addAttribute("employees", employeeRepository.findAll()); // Assuming you have a service method to get
 			model.addAttribute("statuses", statusRepository.findAll()); // Assuming you have a service method to get all													// // // // statuses
+			model.addAttribute("approvals", approvalRepository.findAll());
 			return "edittaskUser";
 		} else {
 			return "redirect:/tasklist";

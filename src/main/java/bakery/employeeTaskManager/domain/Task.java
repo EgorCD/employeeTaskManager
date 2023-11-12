@@ -40,6 +40,11 @@ public class Task {
 	@JsonIgnore
 	@JoinColumn(name = "statusid")
 	private Status status;
+	
+	@ManyToOne
+	@JsonIgnore
+	@JoinColumn(name = "approvalid")
+	private Approval approval;
 
 	public Task() {
 		this.id = null;
@@ -51,11 +56,12 @@ public class Task {
 		this.postedDate = LocalDateTime.now(); // default to current time, adjust as needed
 		this.deadline = LocalDateTime.now();
 		this.status = null;
+		this.approval = null;
 	}
 
 	// Parameterized constructor
 	public Task(Address address, Employee employee, String request, String response, String feedback, LocalDateTime postedDate, LocalDateTime deadline, 
-			Status status) {
+			Status status, Approval approval) {
 		this.address = address;
 		this.employee = employee;
 		this.request = request;
@@ -64,6 +70,7 @@ public class Task {
 		this.postedDate = LocalDateTime.now(); // default to current time, adjust as needed
 		this.deadline = LocalDateTime.now();
 		this.status = status;
+		this.approval = approval;
 	}
 
 	// Getters and setters
@@ -122,6 +129,14 @@ public class Task {
 	public void setStatus(Status status) {
 		this.status = status;
 	}
+	
+	public Approval getApproval() {
+		return approval;
+	}
+
+	public void setApproval(Approval approval) {
+		this.approval = approval;
+	}
 
 	public LocalDateTime getPostedDate() {
 		return postedDate;
@@ -143,6 +158,6 @@ public class Task {
 	public String toString() {
 		return "Report [id=" + id + ", address=" + (address != null ? address : "null") + ", username="
 				+ (employee != null ? employee : "null") + ", request=" + request + ", postedDate=" + postedDate + ", deadline="
-				+ deadline + ", status=" + (status != null ? status : "null") + "]";
+				+ deadline + ", status=" + (status != null ? status : "null") + (approval != null ? approval : "null") + "]";
 	}
 }

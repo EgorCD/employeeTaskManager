@@ -93,6 +93,16 @@
 					</option>
 				</select>
 			</div>
+			
+			<!-- Approval Dropdown for User -->
+			<div class="form-group" >
+				<label for="approval" class="form-label">Status</label> <select
+					id="approval" class="form-control" th:field="*{approval.approvalid}"
+					onmousedown="return false;" onkeydown="return false;">
+					<option th:each="approval : ${approvals}"
+						th:value="${approval.approvalid}" th:text="${approval.name}"></option>
+				</select>
+			</div>
 
 			<!-- Submit Button -->
 			<div class="mb-3">

@@ -59,7 +59,7 @@
 					th:field="*{response}" required readonly />
 			</div>
 			
-			<!-- Response Field for User -->
+			<!-- Feedback Field for User -->
 			<div class="mb-3">
 				<label for="feedback" class="form-label">Feedback</label> <input
 					type="text" id="feedback" class="form-control"
@@ -81,13 +81,22 @@
 			</div>
 			
 			<!-- Status Dropdown for User -->
-			<div class="mb-3">
+			<div class="mb-3" sec:authorize="hasAuthority('ADMIN')">
 				<label for="status" class="form-label">Status</label> <select
 					id="status" class="form-control" th:field="*{status.statusid}">
 					<option th:each="status : ${statuses}"
 						th:value="${status.statusid}" th:text="${status.name}"
 						th:selected="${status.statusid == task.status.statusid ? 'selected' : ''}">
 					</option>
+				</select>
+			</div>
+			
+			<!-- Approval Dropdown for User -->
+			<div class="form-group" sec:authorize="hasAuthority('ADMIN')">
+				<label for="approval" class="form-label">Status</label> <select
+					id="approval" class="form-control" th:field="*{approval.approvalid}">
+					<option th:each="approval : ${approvals}"
+						th:value="${approval.approvalid}" th:text="${approval.name}"></option>
 				</select>
 			</div>
 

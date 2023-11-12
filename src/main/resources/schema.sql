@@ -40,7 +40,9 @@ CREATE TABLE IF NOT EXISTS task_table (
     posted_date DATETIME,
     deadline DATETIME,
     statusid BIGINT,
+    approvalid BIGINT,
     FOREIGN KEY (addressid) REFERENCES address_table(addressid),
     FOREIGN KEY (employeeid) REFERENCES employee_table(employeeid),
-    FOREIGN KEY (statusid) REFERENCES status_table(statusid)
+    FOREIGN KEY (statusid) REFERENCES status_table(statusid),
+    FOREIGN KEY (approvalid) REFERENCES approval_table(approvalid)
 );
