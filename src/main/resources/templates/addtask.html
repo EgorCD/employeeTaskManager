@@ -69,11 +69,12 @@
 						th:value="${status.statusid}" th:text="${status.name}"></option>
 				</select>
 			</div>
-			
+
 			<!-- Approval Dropdown for User -->
 			<div class="form-group" sec:authorize="hasAuthority('ADMIN')">
 				<label for="approval" class="form-label">Status</label> <select
-					id="approval" class="form-control" th:field="*{approval.approvalid}">
+					id="approval" class="form-control"
+					th:field="*{approval.approvalid}">
 					<option th:each="approval : ${approvals}"
 						th:value="${approval.approvalid}" th:text="${approval.name}"></option>
 				</select>

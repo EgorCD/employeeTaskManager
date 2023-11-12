@@ -5,11 +5,11 @@
 <title>Edit Task</title>
 <link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css"
 	th:href="@{/css/bootstrap.min.css}" />
-	<style>
-		.bold-text * {
-			font-weight: bold;
-		}
-	</style>
+<style>
+.bold-text * {
+	font-weight: bold;
+}
+</style>
 </head>
 <body>
 	<div class="container mt-5 bold-text">
@@ -61,12 +61,12 @@
 					type="text" id="response" class="form-control"
 					th:field="*{response}" placeholder="Done by Egor Chumakov" required />
 			</div>
-			
+
 			<!-- Response Field for User -->
 			<div class="mb-3">
 				<label for="feedback" class="form-label">Feedback</label> <input
 					type="text" id="feedback" class="form-control"
-					th:field="*{feedback}" required readonly/>
+					th:field="*{feedback}" required readonly />
 			</div>
 
 			<div class="mb-3">
@@ -93,12 +93,13 @@
 					</option>
 				</select>
 			</div>
-			
+
 			<!-- Approval Dropdown for User -->
-			<div class="form-group" >
+			<div class="form-group">
 				<label for="approval" class="form-label">Status</label> <select
-					id="approval" class="form-control" th:field="*{approval.approvalid}"
-					onmousedown="return false;" onkeydown="return false;">
+					id="approval" class="form-control"
+					th:field="*{approval.approvalid}" onmousedown="return false;"
+					onkeydown="return false;">
 					<option th:each="approval : ${approvals}"
 						th:value="${approval.approvalid}" th:text="${approval.name}"></option>
 				</select>
