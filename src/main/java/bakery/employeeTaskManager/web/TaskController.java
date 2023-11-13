@@ -12,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import bakery.employeeTaskManager.domain.Task;
 import bakery.employeeTaskManager.domain.TaskRepository;
@@ -19,6 +20,8 @@ import bakery.employeeTaskManager.domain.AddressRepository;
 import bakery.employeeTaskManager.domain.ApprovalRepository;
 import bakery.employeeTaskManager.domain.EmployeeRepository;
 import bakery.employeeTaskManager.domain.StatusRepository;
+
+import bakery.employeeTaskManager.web.*;
 
 @Controller
 public class TaskController {
@@ -34,6 +37,9 @@ public class TaskController {
 
 	@Autowired
 	private EmployeeRepository employeeRepository;
+	
+	@Autowired
+	private FileController fileController;
 	
 	@Autowired
 	private ApprovalRepository approvalRepository;
@@ -78,11 +84,12 @@ public class TaskController {
 		return "addtask";
 	}
 
-	// Save new task
 	@PostMapping("/saveTask")
-	public String saveTask(Task task) {
-		taskRepository.save(task);
-		return "redirect:/tasklist";
+	public String saveTask(@RequestParam("file") MultipartFile file, Task task) {
+	    String fileName = fileController.storeFile(file);
+	    task.setFileName(fileName);
+	    taskRepository.save(task);
+	    return "redirect:/tasklist";
 	}
 
 	// Delete a task

@@ -2,6 +2,7 @@ package bakery.employeeTaskManager.domain;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -25,9 +26,9 @@ public class Task {
 	private Employee employee;
 
 	private String request;
-	
+
 	private String response;
-	
+
 	private String feedback;
 
 	// New fields for task posted date and deadline
@@ -41,23 +42,37 @@ public class Task {
 	@JsonIgnore
 	@JoinColumn(name = "statusid")
 	private Status status;
-	
+
 	@ManyToOne
 	@JsonIgnore
 	@JoinColumn(name = "approvalid")
 	private Approval approval;
-	
+
 	@Transient
-    private long daysUntilDeadline;
+	private long daysUntilDeadline;
 
-    // Call this method to calculate the days until the deadline
-    public void calculateDaysUntilDeadline() {
-        this.daysUntilDeadline = ChronoUnit.DAYS.between(LocalDateTime.now(), this.deadline);
-    }
+	// Call this method to calculate the days until the deadline
+	public void calculateDaysUntilDeadline() {
+		if (this.deadline != null) {
+			this.daysUntilDeadline = ChronoUnit.DAYS.between(LocalDateTime.now(), this.deadline);
+		} else {
+			this.daysUntilDeadline = Long.MAX_VALUE; // Or some other appropriate error value.
+		}
+	}
 
-    public long getDaysUntilDeadline() {
-        return daysUntilDeadline;
-    }
+	public long getDaysUntilDeadline() {
+		return daysUntilDeadline;
+	}
+
+	private String fileName; // Name or path of the uploaded file
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
 
 	public Task() {
 		this.id = null;
@@ -70,11 +85,12 @@ public class Task {
 		this.deadline = LocalDateTime.now();
 		this.status = null;
 		this.approval = null;
+		this.fileName = "";
 	}
 
 	// Parameterized constructor
-	public Task(Address address, Employee employee, String request, String response, String feedback, LocalDateTime postedDate, LocalDateTime deadline, 
-			Status status, Approval approval) {
+	public Task(Address address, Employee employee, String request, String response, String feedback,
+			LocalDateTime postedDate, LocalDateTime deadline, Status status, Approval approval, String fileName) {
 		this.address = address;
 		this.employee = employee;
 		this.request = request;
@@ -84,6 +100,7 @@ public class Task {
 		this.deadline = LocalDateTime.now();
 		this.status = status;
 		this.approval = approval;
+		this.fileName = fileName;
 	}
 
 	// Getters and setters
@@ -96,6 +113,10 @@ public class Task {
 	}
 
 	public Address getAddress() {
+		return address;
+	}
+
+	public Address getName() {
 		return address;
 	}
 
@@ -118,7 +139,7 @@ public class Task {
 	public void setRequest(String request) {
 		this.request = request;
 	}
-	
+
 	public String getResponse() {
 		return response;
 	}
@@ -126,7 +147,7 @@ public class Task {
 	public void setResponse(String response) {
 		this.response = response;
 	}
-	
+
 	public String getFeedback() {
 		return feedback;
 	}
@@ -142,7 +163,7 @@ public class Task {
 	public void setStatus(Status status) {
 		this.status = status;
 	}
-	
+
 	public Approval getApproval() {
 		return approval;
 	}
@@ -170,7 +191,8 @@ public class Task {
 	@Override
 	public String toString() {
 		return "Report [id=" + id + ", address=" + (address != null ? address : "null") + ", username="
-				+ (employee != null ? employee : "null") + ", request=" + request + ", postedDate=" + postedDate + ", deadline="
-				+ deadline + ", status=" + (status != null ? status : "null") + (approval != null ? approval : "null") + "]";
+				+ (employee != null ? employee : "null") + ", request=" + request + ", postedDate=" + postedDate
+				+ ", deadline=" + deadline + ", status=" + (status != null ? status : "null")
+				+ (approval != null ? approval : "null") + "]";
 	}
 }

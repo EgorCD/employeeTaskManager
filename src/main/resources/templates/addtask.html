@@ -13,8 +13,8 @@
 </head>
 <body>
 	<div class="container mt-5 bold-text">
-		<form th:action="@{/saveTask}" th:object="${task}" method="post"
-			class="form-group">
+        <!-- Add enctype attribute for file upload -->
+        <form th:action="@{/saveTask}" th:object="${task}" method="post" enctype="multipart/form-data" class="form-group">
 
 			<!-- Address Field -->
 			<div class="form-group" sec:authorize="hasAuthority('ADMIN')">
@@ -78,6 +78,12 @@
 					<option th:each="approval : ${approvals}"
 						th:value="${approval.approvalid}" th:text="${approval.name}"></option>
 				</select>
+			</div>
+
+			<!-- File Upload Field -->
+			<div class="form-group">
+				<label for="file">File</label> <input type="file" id="file"
+					name="file" class="form-control">
 			</div>
 
 			<!-- Submit Button -->

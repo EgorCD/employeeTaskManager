@@ -1,5 +1,8 @@
 package bakery.employeeTaskManager.domain;
 
+import java.util.Collection;
+import java.util.Set;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -61,5 +64,4 @@ public class AppUser {
 	public void setRole(String role) {
 		this.role = role;
 	}
-
 }

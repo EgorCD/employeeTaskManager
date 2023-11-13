@@ -24,5 +24,4 @@ public interface TaskRepository extends CrudRepository<Task, Long> {
 	
 	@Query("SELECT t FROM Task t WHERE t.approval.name = 'approved'")
 	List<Task> findApprovedTasks();
-
 }
