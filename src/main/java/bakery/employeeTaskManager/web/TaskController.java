@@ -1,11 +1,13 @@
 package bakery.employeeTaskManager.web;
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -59,7 +61,9 @@ public class TaskController {
 	// Show task list page
 	@GetMapping("/tasklist")
 	public String showTaskList(Model model) {
-		model.addAttribute("tasks", taskRepository.findAll());
+		List<Task> tasks = (List<Task>) taskRepository.findAllByOrderByDeadlineAsc();
+		tasks.forEach(Task::calculateDaysUntilDeadline);
+		model.addAttribute("tasks", taskRepository.findAllByOrderByDeadlineAsc());
 		return "index"; // Assume there is a tasklist.html template
 	}
 
@@ -126,6 +130,28 @@ public class TaskController {
 	        model.addAttribute("tasks", tasks);
 	    }
 	    return "index"; // Renders the index.html template
+	}
+	
+	@GetMapping("/overdueTasks")
+	public String showOverdueTasks(Model model) {
+	    LocalDateTime now = LocalDateTime.now();
+	    List<Task> overdueTasks = taskRepository.findOverdueTasks(now);
+	    model.addAttribute("tasks", overdueTasks);
+	    return "index"; // Point to your overdue tasks template
+	}
+	
+	@GetMapping("/notApprovedTasks")
+	public String showNotApprovedTasks(Model model) {
+	    List<Task> notApprovedTasks = taskRepository.findNotApprovedTasks();
+	    model.addAttribute("tasks", notApprovedTasks);
+	    return "index"; // Point to your not approved tasks template
+	}
+	
+	@GetMapping("/ApprovedTasks")
+	public String showApprovedTasks(Model model) {
+	    List<Task> ApprovedTasks = taskRepository.findApprovedTasks();
+	    model.addAttribute("tasks", ApprovedTasks);
+	    return "index"; // Point to your not approved tasks template
 	}
 	
 	@GetMapping("/editTaskUser/{id}")

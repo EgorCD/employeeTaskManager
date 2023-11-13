@@ -1,6 +1,7 @@
 package bakery.employeeTaskManager.domain;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -45,6 +46,18 @@ public class Task {
 	@JsonIgnore
 	@JoinColumn(name = "approvalid")
 	private Approval approval;
+	
+	@Transient
+    private long daysUntilDeadline;
+
+    // Call this method to calculate the days until the deadline
+    public void calculateDaysUntilDeadline() {
+        this.daysUntilDeadline = ChronoUnit.DAYS.between(LocalDateTime.now(), this.deadline);
+    }
+
+    public long getDaysUntilDeadline() {
+        return daysUntilDeadline;
+    }
 
 	public Task() {
 		this.id = null;
