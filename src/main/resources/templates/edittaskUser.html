@@ -104,12 +104,13 @@
 						th:value="${approval.approvalid}" th:text="${approval.name}"></option>
 				</select>
 			</div>
-			
-			<!-- File Upload Field -->
-			<div class="form-group">
+
+			<!-- <div class="form-group">
 				<label for="file">File</label> <input type="file" id="file"
-					name="file" class="form-control">
-			</div>
+					name="file" class="form-control"> <span
+					th:if="${existingFileName}"
+					th:text="${'Current file: ' + existingFileName}"></span>
+			</div> -->
 
 			<!-- Submit Button -->
 			<div class="mb-3">

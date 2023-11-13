@@ -109,6 +109,8 @@ public class TaskController {
 	        String formattedDeadline = task.getDeadline().format(formatter);
 	        log.info("Formatted Posted Date: " + formattedPostedDate);
 	        log.info("Formatted Deadline: " + formattedDeadline);
+	        String existingFileName = task.getFileName(); // Replace with your method to get the file name
+	        model.addAttribute("existingFileName", existingFileName);
 	        model.addAttribute("task", task);
 	        model.addAttribute("formattedPostedDate", formattedPostedDate);
 	        model.addAttribute("formattedDeadline", formattedDeadline);
@@ -171,6 +173,8 @@ public class TaskController {
 	        log.info("Formatted Posted Date: " + formattedPostedDate);
 	        log.info("Formatted Deadline: " + formattedDeadline);
 	        model.addAttribute("task", task);
+	        String existingFileName = task.getFileName(); // Replace with your method to get the file name
+	        model.addAttribute("existingFileName", existingFileName);
 	        model.addAttribute("formattedPostedDate", formattedPostedDate);
 	        model.addAttribute("formattedDeadline", formattedDeadline);
 			model.addAttribute("addresses", addressRepository.findAll()); // Assuming you have a service method to get

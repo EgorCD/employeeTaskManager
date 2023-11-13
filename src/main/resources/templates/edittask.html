@@ -5,11 +5,11 @@
 <title>Edit Task</title>
 <link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css"
 	th:href="@{/css/bootstrap.min.css}" />
-	<style>
-		.bold-text * {
-			font-weight: bold;
-		}
-	</style>
+<style>
+.bold-text * {
+	font-weight: bold;
+}
+</style>
 </head>
 <body>
 	<div class="container mt-5 bold-text">
@@ -58,7 +58,7 @@
 					type="text" id="response" class="form-control"
 					th:field="*{response}" required readonly />
 			</div>
-			
+
 			<!-- Feedback Field for User -->
 			<div class="mb-3">
 				<label for="feedback" class="form-label">Feedback</label> <input
@@ -79,7 +79,7 @@
 					th:value="${#temporals.format(task.deadline, 'yyyy-MM-dd''T''HH:mm')}"
 					name="deadline" readonly />
 			</div>
-			
+
 			<!-- Status Dropdown for User -->
 			<div class="mb-3" sec:authorize="hasAuthority('ADMIN')">
 				<label for="status" class="form-label">Status</label> <select
@@ -90,21 +90,23 @@
 					</option>
 				</select>
 			</div>
-			
+
 			<!-- Approval Dropdown for User -->
 			<div class="form-group" sec:authorize="hasAuthority('ADMIN')">
 				<label for="approval" class="form-label">Status</label> <select
-					id="approval" class="form-control" th:field="*{approval.approvalid}">
+					id="approval" class="form-control"
+					th:field="*{approval.approvalid}">
 					<option th:each="approval : ${approvals}"
 						th:value="${approval.approvalid}" th:text="${approval.name}"></option>
 				</select>
 			</div>
-			
-			<!-- File Upload Field -->
-			<div class="form-group">
+
+			<!-- <div class="form-group">
 				<label for="file">File</label> <input type="file" id="file"
-					name="file" class="form-control">
-			</div>
+					name="file" class="form-control"> <span
+					th:if="${existingFileName}"
+					th:text="${'Current file: ' + existingFileName}"></span>
+			</div>   -->
 
 			<!-- Submit Button -->
 			<div class="mb-3">
