@@ -14,7 +14,7 @@
 <body>
 	<div class="container mt-5 bold-text">
 		<form th:action="@{/saveEditedTask}" th:object="${task}" method="post"
-			class="form-group">
+			class="form-group" enctype="multipart/form-data">
 
 			<!-- Request Field  -->
 			<div class="mb-3">
@@ -105,12 +105,9 @@
 				</select>
 			</div>
 
-			<!-- <div class="form-group">
-				<label for="file">File</label> <input type="file" id="file"
-					name="file" class="form-control"> <span
-					th:if="${existingFileName}"
-					th:text="${'Current file: ' + existingFileName}"></span>
-			</div> -->
+			<!-- Hidden field for existing file name -->
+			<input type="hidden" th:field="*{fileName}" />
+
 
 			<!-- Submit Button -->
 			<div class="mb-3">
