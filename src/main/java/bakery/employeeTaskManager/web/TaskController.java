@@ -125,8 +125,10 @@ public class TaskController {
 	}
 
 	@PostMapping("/saveEditedTask")
-	public String saveEditedTask(@ModelAttribute Task taskForm) {
-		taskRepository.save(taskForm);
+	public String saveEditedTask(@RequestParam("file") MultipartFile file, Task task) {
+		String fileName = fileController.storeFile(file);
+	    task.setFileName(fileName);
+	    taskRepository.save(task);
 		return "redirect:/tasklist";
 	}
 	
@@ -188,8 +190,10 @@ public class TaskController {
 	}
 
 	@PostMapping("/saveEditedTaskUser")
-	public String saveEditedTaskUser(@ModelAttribute Task taskForm) {
-		taskRepository.save(taskForm);
+	public String saveEditedTaskUser(@RequestParam("file") MultipartFile file, Task task) {
+		String fileName = fileController.storeFile(file);
+	    task.setFileName(fileName);
+	    taskRepository.save(task);
 		return "redirect:/tasklist";
 	}
 }
