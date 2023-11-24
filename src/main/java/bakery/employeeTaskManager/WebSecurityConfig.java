@@ -19,23 +19,28 @@ public class WebSecurityConfig {
 	@Autowired
 	private AppUserDetailServiceImpl appuserDetailsService;
 
-	// using lambda
 	@Bean
 	public SecurityFilterChain configure(HttpSecurity http) throws Exception {
-
+		// Configuring HTTP security settings using lambda expressions
 		http.authorizeHttpRequests(authorize -> authorize.requestMatchers(antMatcher("/css/**")).permitAll()
+				// Permitting all requests to CSS resources, signup page, and save user endpoint
 				.requestMatchers(antMatcher("/signup")).permitAll().requestMatchers(antMatcher("/saveuser")).permitAll()
+				// Requiring authentication for all other requests
 				.anyRequest().authenticated())
 				.headers(headers -> headers.frameOptions(frameoptions -> frameoptions.disable() // for h2 console
 				))
+				// Setting custom login page and redirect on success
 				.formLogin(formlogin -> formlogin.loginPage("/login").defaultSuccessUrl("/tasklist", true).permitAll())
+				// Allowing everyone to access the logout functionality
 				.logout(logout -> logout.permitAll());
 
 		return http.build();
 	}
 
+	// Method to configure the global AuthenticationManager
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+		// Setting up the userDetailsService with a password encoder
 		auth.userDetailsService(appuserDetailsService).passwordEncoder(new BCryptPasswordEncoder());
 	}
 }

@@ -13,11 +13,13 @@ import com.jayway.jsonpath.internal.Path;
 
 @SpringBootApplication
 public class EmployeeTaskManagerApplication {
-
+	
+	// Main method - entry point of the Spring Boot application
 	public static void main(String[] args) {
 		SpringApplication.run(EmployeeTaskManagerApplication.class, args);
 	}
 	
+	// Method to configure resource handlers
 	@Configuration
 	public class WebConfig implements WebMvcConfigurer {
 
@@ -25,7 +27,7 @@ public class EmployeeTaskManagerApplication {
 	    public void addResourceHandlers(ResourceHandlerRegistry registry) {
 	        registry.addResourceHandler("/**")
 	                .addResourceLocations("classpath:/static/")
-	                .setCachePeriod(0); // No caching
+	                .setCachePeriod(0); // No caching for static resources
 	    }
 	}
 

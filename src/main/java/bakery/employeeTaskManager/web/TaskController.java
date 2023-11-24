@@ -46,13 +46,13 @@ public class TaskController {
 
 	private static final Logger log = LoggerFactory.getLogger(TaskController.class);
 
-	// Show login page
+	// login page
 	@GetMapping("/login")
 	public String login() {
 		return "login";
 	}
 
-	// Create REST service that returns all tasks (JSON)
+	// REST service that returns all tasks (JSON)
 	@GetMapping("/api/tasks")
 	public @ResponseBody Iterable<Task> getAllTasks() {
 		return taskRepository.findAll();
@@ -61,7 +61,7 @@ public class TaskController {
 	// Create REST service that returns one task by ID (JSON)
 	@GetMapping("/api/tasks/{id}")
 	public @ResponseBody Task getTaskById(@PathVariable("id") Long id) {
-		return taskRepository.findById(id).orElse(null); // Consider better error handling here
+		return taskRepository.findById(id).orElse(null); 
 	}
 
 	// Show task list page
@@ -70,20 +70,21 @@ public class TaskController {
 		List<Task> tasks = (List<Task>) taskRepository.findAllByOrderByDeadlineAsc();
 		tasks.forEach(Task::calculateDaysUntilDeadline);
 		model.addAttribute("tasks", taskRepository.findAllByOrderByDeadlineAsc());
-		return "index"; // Assume there is a tasklist.html template
+		return "index"; // tasklist.html template
 	}
 
 	// Show add task page
 	@GetMapping("/addTask")
 	public String addTask(Model model) {
 		model.addAttribute("task", new Task()); // Add an empty task object for the form binding
-		model.addAttribute("addresses", addressRepository.findAll()); // Assuming you have a service method to get all															// // addresses
-		model.addAttribute("employees", employeeRepository.findAll()); // Assuming you have a service method to get all
-		model.addAttribute("statuses", statusRepository.findAll()); // Assuming you have a service method to get all //															// statuses
+		model.addAttribute("addresses", addressRepository.findAll());
+		model.addAttribute("employees", employeeRepository.findAll());
+		model.addAttribute("statuses", statusRepository.findAll());
 		model.addAttribute("approvals", approvalRepository.findAll());
 		return "addtask";
 	}
 
+	// Mapping to save a task with file upload
 	@PostMapping("/saveTask")
 	public String saveTask(@RequestParam("file") MultipartFile file, Task task) {
 	    String fileName = fileController.storeFile(file);
@@ -92,7 +93,7 @@ public class TaskController {
 	    return "redirect:/tasklist";
 	}
 
-	// Delete a task
+	// Mapping to delete a task, accessible only by users with 'ADMIN' authority
 	@PreAuthorize("hasAuthority('ADMIN')")
 	@GetMapping("/deleteTask/{id}")
 	public String deleteTask(@PathVariable("id") Long taskId) {
@@ -100,23 +101,27 @@ public class TaskController {
 		return "redirect:/tasklist";
 	}
 
+	// Mapping to edit a task
 	@GetMapping("/editTask/{id}")
 	public String editTask(@PathVariable("id") Long taskId, Model model) {
 		Task task = taskRepository.findById(taskId).orElse(null);
 		if (task != null) {
+			// Formatting date and time for display
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 	        String formattedPostedDate = task.getPostedDate().format(formatter);
 	        String formattedDeadline = task.getDeadline().format(formatter);
 	        log.info("Formatted Posted Date: " + formattedPostedDate);
 	        log.info("Formatted Deadline: " + formattedDeadline);
-	        String existingFileName = task.getFileName(); // Replace with your method to get the file name
+	        String existingFileName = task.getFileName();
+	        // Adding attributes to the model
 	        model.addAttribute("existingFileName", existingFileName);
 	        model.addAttribute("task", task);
 	        model.addAttribute("formattedPostedDate", formattedPostedDate);
 	        model.addAttribute("formattedDeadline", formattedDeadline);
-			model.addAttribute("addresses", addressRepository.findAll()); // Assuming you have a service method to get
-			model.addAttribute("employees", employeeRepository.findAll()); // Assuming you have a service method to get
-			model.addAttribute("statuses", statusRepository.findAll()); // Assuming you have a service method to get all													// // // // statuses
+	        // Adding lists of addresses, employees, statuses, and approvals to the model
+			model.addAttribute("addresses", addressRepository.findAll());
+			model.addAttribute("employees", employeeRepository.findAll());
+			model.addAttribute("statuses", statusRepository.findAll());
 			model.addAttribute("approvals", approvalRepository.findAll());
 			return "edittask";
 		} else {
@@ -124,6 +129,7 @@ public class TaskController {
 		}
 	}
 
+	// Mapping to save an edited task
 	@PostMapping("/saveEditedTask")
 	public String saveEditedTask(@RequestParam("file") MultipartFile file, Task task) {
 		String fileName = fileController.storeFile(file);
@@ -132,6 +138,7 @@ public class TaskController {
 		return "redirect:/tasklist";
 	}
 	
+	// Mapping to search for tasks based on employee name
 	@GetMapping("/searchTasks")
 	public String searchTasks(@RequestParam String employeeName, Model model) {
 	    List<Task> tasks = taskRepository.findByEmployeeName(employeeName);
@@ -143,28 +150,32 @@ public class TaskController {
 	    return "index"; // Renders the index.html template
 	}
 	
+	// Mapping to show overdue tasks
 	@GetMapping("/overdueTasks")
 	public String showOverdueTasks(Model model) {
 	    LocalDateTime now = LocalDateTime.now();
 	    List<Task> overdueTasks = taskRepository.findOverdueTasks(now);
 	    model.addAttribute("tasks", overdueTasks);
-	    return "index"; // Point to your overdue tasks template
+	    return "index"; // Point to overdue tasks template
 	}
 	
+	// Mapping to show tasks that are not approved
 	@GetMapping("/notApprovedTasks")
 	public String showNotApprovedTasks(Model model) {
 	    List<Task> notApprovedTasks = taskRepository.findNotApprovedTasks();
 	    model.addAttribute("tasks", notApprovedTasks);
-	    return "index"; // Point to your not approved tasks template
+	    return "index"; // Point to not approved tasks template
 	}
 	
+	// Mapping to show approved tasks
 	@GetMapping("/ApprovedTasks")
 	public String showApprovedTasks(Model model) {
 	    List<Task> ApprovedTasks = taskRepository.findApprovedTasks();
 	    model.addAttribute("tasks", ApprovedTasks);
-	    return "index"; // Point to your not approved tasks template
+	    return "index"; // Point to not approved tasks template
 	}
 	
+	// Mapping to edit a task as a user
 	@GetMapping("/editTaskUser/{id}")
 	public String editTaskUser(@PathVariable("id") Long taskId, Model model) {
 		Task task = taskRepository.findById(taskId).orElse(null);
@@ -175,13 +186,13 @@ public class TaskController {
 	        log.info("Formatted Posted Date: " + formattedPostedDate);
 	        log.info("Formatted Deadline: " + formattedDeadline);
 	        model.addAttribute("task", task);
-	        String existingFileName = task.getFileName(); // Replace with your method to get the file name
+	        String existingFileName = task.getFileName();
 	        model.addAttribute("existingFileName", existingFileName);
 	        model.addAttribute("formattedPostedDate", formattedPostedDate);
 	        model.addAttribute("formattedDeadline", formattedDeadline);
-			model.addAttribute("addresses", addressRepository.findAll()); // Assuming you have a service method to get
-			model.addAttribute("employees", employeeRepository.findAll()); // Assuming you have a service method to get
-			model.addAttribute("statuses", statusRepository.findAll()); // Assuming you have a service method to get all													// // // // statuses
+			model.addAttribute("addresses", addressRepository.findAll());
+			model.addAttribute("employees", employeeRepository.findAll());
+			model.addAttribute("statuses", statusRepository.findAll());
 			model.addAttribute("approvals", approvalRepository.findAll());
 			return "edittaskUser";
 		} else {
@@ -189,6 +200,7 @@ public class TaskController {
 		}
 	}
 
+	// Mapping to save an edited task by a user
 	@PostMapping("/saveEditedTaskUser")
 	public String saveEditedTaskUser(@RequestParam("file") MultipartFile file, Task task) {
 		String fileName = fileController.storeFile(file);

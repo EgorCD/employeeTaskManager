@@ -51,12 +51,12 @@ public class Task {
 	@Transient
 	private long daysUntilDeadline;
 
-	// Call this method to calculate the days until the deadline
+	// Method to calculate the days until the deadline
 	public void calculateDaysUntilDeadline() {
 		if (this.deadline != null) {
 			this.daysUntilDeadline = ChronoUnit.DAYS.between(LocalDateTime.now(), this.deadline);
 		} else {
-			this.daysUntilDeadline = Long.MAX_VALUE; // Or some other appropriate error value.
+			this.daysUntilDeadline = Long.MAX_VALUE;
 		}
 	}
 
@@ -81,7 +81,7 @@ public class Task {
 		this.request = "";
 		this.response = "";
 		this.feedback = "";
-		this.postedDate = LocalDateTime.now(); // default to current time, adjust as needed
+		this.postedDate = LocalDateTime.now(); // default to current time
 		this.deadline = LocalDateTime.now();
 		this.status = null;
 		this.approval = null;
@@ -96,7 +96,7 @@ public class Task {
 		this.request = request;
 		this.response = response;
 		this.feedback = feedback;
-		this.postedDate = LocalDateTime.now(); // default to current time, adjust as needed
+		this.postedDate = LocalDateTime.now(); // default to current time
 		this.deadline = LocalDateTime.now();
 		this.status = status;
 		this.approval = approval;
